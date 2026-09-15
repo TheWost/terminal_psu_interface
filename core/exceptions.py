@@ -1,5 +1,5 @@
 
-class InavlidDriverError(Exception):
+class InvalidDriverError(Exception):
     pass
 
 class DriverNotFound(Exception):

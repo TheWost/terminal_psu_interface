@@ -10,6 +10,8 @@ class PsuConnection:
     def load_config(config_path="config.json"):
         """Loads json config"""
 
+
+
         if Path(config_path).exists():
             with open(config_path, "r") as f:
                 data = json.load(f)

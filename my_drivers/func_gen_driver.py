@@ -1,7 +1,7 @@
 from pathlib import Path
-from ..connect import PsuConnection
+from core.connect import PsuConnection
 
-class Instrument:
+class FunctionGenerator:
     def __init__(self):
         self.__inst = PsuConnection.connect()
         self.mark, self.name = _prase_name()
@@ -25,7 +25,7 @@ class Instrument:
         freq = input(Fore.YELLOW + "Frequency [Hz]: ")
         self.__inst.write(f"FREQ {freq}")
 
-     def set_voltage(self):
+    def set_voltage(self):
         self.clear()
         current_voltage = self.__inst.query("VOLT?")
         current_voltage_prased = self._prase_the_number(current_voltage)
@@ -53,6 +53,20 @@ class Instrument:
 
     def set_output_on(self):
         self.__inst.write("OUTP ON")
+
+    def get_actions(self):
+            return {
+                "identify": self.identify,
+                "set_frequency": self.set_frequency,
+                "set_voltage": self.set_voltage,
+                "set_sin": self.set_sin,
+                "set_sqr": self.set_sqr,
+                "set_ramp": self.set_ramp,
+                "set_pulse": self.set_pulse,
+                "set_noise": self.set_noise,
+                "set_output_off": self.set_output_off,
+                "set_output_on": self.set_output_on,
+            }
 
 
 
