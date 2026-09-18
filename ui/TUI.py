@@ -13,22 +13,9 @@ class Tui:
         self.__drivers = drivers
         self.__driver = self.__chose_driver()
 
-        if not hasattr(self.__driver, "get_actions"):
-            raise InvalidDriverError("Driver must have method called .get_actions()")
-
-
-        if hasattr(self.__driver, "mark") and hasattr(self.__driver, "name"):
-            self.mark, self.name = self.__driver.mark, self.__driver.name
-
-        else:
-
-            if hasattr(self.__driver, "identify"):
-                self.mark, self.name = self.__driver.identify()
-            else:
-                self.mark, self.name = "Not", "Found"
-
+        self.mark = self.__driver.mark
+        self.name = self.__driver.name
         self.__actions = self.__driver.get_actions()
-
 
     def __chose_driver(self):
         for i, driver in enumerate(self.__drivers, start=1):
@@ -45,7 +32,7 @@ class Tui:
     def __invalid_input_text(self):
         return f"{Fore.RED}{Style.BRIGHT}Invalid input."
 
-    def __print_menu(self):
+    def _print_menu(self):
         header = f" === {self.mark} {self.name} ==="
         print(header)
 
@@ -78,13 +65,28 @@ class Tui:
     def get_action_by_index(self,user_choice):
         if not user_choice:
             return
-        return list(self.__actions.value())[user_choice] # If something here breaks. Please change from items to keys. And then using that key get action.
+        user_key = list(self.__actions)[user_choice]
+        action = self.__actions[user_key]
+        return action
 
+    def _handle_action(self, action):
+        if not action["args"]:
+            action["func"]()
+            return
+
+        args = []
+        self.clear()
+        for arg in action["args"]:
+            print(arg)
+            args.append(input("> "))
+
+        action["func"](*args)
+        input("Press Enter to continue...")
+        
     def run(self):
         while True:
             self.clear()
             self._print_menu()
             user_choice = self.get_user_choice()
             action = self.get_action_by_index(user_choice)
-            self.clear()
-            action()
+            self._handle_action(action)
