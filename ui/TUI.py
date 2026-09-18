@@ -16,14 +16,18 @@ class Tui:
         if not hasattr(self.__driver, "get_actions"):
             raise InvalidDriverError("Driver must have method called .get_actions()")
 
-        if hasattr(self.__driver, "identify"):
-            self.mark, self.name = self.__driver.identify()
+
+        if hasattr(self.__driver, "mark") and hasattr(self.__driver, "name"):
+            self.mark, self.name = self.__driver.mark, self.__driver.name
+
         else:
-            self.mark, self.name = "Not", "Found"
+
+            if hasattr(self.__driver, "identify"):
+                self.mark, self.name = self.__driver.identify()
+            else:
+                self.mark, self.name = "Not", "Found"
 
         self.__actions = self.__driver.get_actions()
-
-
 
 
     def __chose_driver(self):
@@ -82,4 +86,5 @@ class Tui:
             self._print_menu()
             user_choice = self.get_user_choice()
             action = self.get_action_by_index(user_choice)
+            self.clear()
             action()
