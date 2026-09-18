@@ -1,7 +1,6 @@
 import os
 from colorama import Fore, Style, init
 import warnings
-from core.exceptions import InvalidDriverError
 
 
 warnings.filterwarnings("ignore", category=UserWarning, module="pyvisa") # Removes warnings from querying output

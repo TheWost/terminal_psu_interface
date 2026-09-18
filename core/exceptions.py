@@ -7,3 +7,6 @@ class DriverNotFound(Exception):
 
 class DriverConnectionError(Exception):
     pass
+
+class ConnectionConfigurationProblem(Exception):
+    pass
